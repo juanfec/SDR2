@@ -22,14 +22,6 @@ import android.widget.Spinner;
 public class Client extends AppCompatActivity {
 
     private Socket socket;
-    private Button frb;
-    private Button spanb;
-    private Button gananciab;
-    private Button ventanab;
-    private Button baseb;
-    private Button escalab;
-
-
     private static final int SERVERPORT = 9999;
     private static final String SERVER_IP = "192.168.1.103";
 
@@ -37,6 +29,12 @@ public class Client extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
+        Button frb;
+        Button spanb;
+        Button gananciab;
+        Button ventanab;
+        Button baseb;
+        Button escalab;
         frb = (Button) findViewById(R.id.frb);
         spanb = (Button) findViewById(R.id.spanb);
         gananciab = (Button) findViewById(R.id.gananciab);
@@ -183,6 +181,8 @@ public class Client extends AppCompatActivity {
             }
         });
     }
+
+
 
     class ClientThread implements Runnable {
 
