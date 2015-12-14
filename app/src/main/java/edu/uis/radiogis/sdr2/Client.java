@@ -2,6 +2,8 @@ package edu.uis.radiogis.sdr2;
 
 import android.app.AlertDialog;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import java.io.BufferedWriter;
@@ -26,10 +28,11 @@ import android.widget.Spinner;
 
 public class Client extends AppCompatActivity {
 
+    public Handler mHandler;
     private Socket socket;
     private Handler handler;
     private static final int SERVERPORT = 9999;
-    private static final String SERVER_IP = "192.168.1.101";
+    private static final String SERVER_IP = "192.168.1.104";
 
 
     @Override
@@ -63,19 +66,22 @@ public class Client extends AppCompatActivity {
         ArrayAdapter<CharSequence> adaptere = ArrayAdapter.createFromResource(this, R.array.escala_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         escala.setAdapter(adaptere);
-
+        new Thread(new ClientThread()).start();
 
 
     }
 
     public void fr(View view) {
         try {
-            //TODO: send messages using the handler
             EditText et = (EditText) findViewById(R.id.fr);
             String str = "{\"fc\":"+et.getText().toString()+"}";
+            Message msg = Message.obtain();
+            msg.obj =  str;
+                    mHandler.sendMessage(msg);
+
 
             // se establece conexcion con el cliente
-            new Thread(new ClientThread()).start();
+
 
 
         } catch (Exception e) {
@@ -85,108 +91,55 @@ public class Client extends AppCompatActivity {
     }
 
     public void span(View view) {
-        try {
-            EditText et = (EditText) findViewById(R.id.span);
-            String str = "{\"span\":"+et.getText().toString()+"}";
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())),
-                    true);
-            out.println(str);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        EditText et = (EditText) findViewById(R.id.span);
+        String str = "{\"ab\":"+et.getText().toString()+"}";
+        Message msg1 = Message.obtain();
+        msg1.obj =  str;
+        mHandler.sendMessage(msg1);
+
     }
 
     public void ganancia(View view) {
-        try {
-            EditText et = (EditText) findViewById(R.id.ganancia);
-            String str = "{\"gan\":"+et.getText().toString()+"}";
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())),
-                    true);
-            out.println(str);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        EditText et = (EditText) findViewById(R.id.ganancia);
+        String str = "{\"gan\":"+et.getText().toString()+"}";
+        Message msg2 = Message.obtain();
+        msg2.obj =  str;
+        mHandler.sendMessage(msg2);
     }
 
     public void ventana(View view) {
-        try {
-            Spinner et = (Spinner) findViewById(R.id.ventana);
-            String str = "{\"ventana\":"+et.getSelectedItem().toString()+"}";
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())),
-                    true);
-            out.println(str);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        Spinner et = (Spinner) findViewById(R.id.ventana);
+        String str = "{\"ventana\":\""+et.getSelectedItem().toString()+"\"}";
+        Message msg3 = Message.obtain();
+        msg3.obj =  str;
+        mHandler.sendMessage(msg3);
+
     }
 
     public void base(View view) {
-        try {
+
             Spinner et = (Spinner) findViewById(R.id.base);
-            String str = "{\"ab\":"+et.getSelectedItem().toString()+"}";
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())),
-                    true);
-            out.println(str);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            String str = "{\"base\":\""+et.getSelectedItem().toString()+"\"}";
+            Message msg4 = Message.obtain();
+            msg4.obj =  str;
+            mHandler.sendMessage(msg4);
+
     }
 
     public void escala(View view) {
-        try {
+
             Spinner et = (Spinner) findViewById(R.id.escala);
-            String str = "{\"es\":"+et.getSelectedItem().toString()+"}";
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())),
-                    true);
-            out.println(str);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //TODO: cambiar escala por la palabra apropiada 
+            String str = "{\"escala\":\""+et.getSelectedItem().toString()+"\"}";
+            Message msg5 = Message.obtain();
+            msg5.obj =  str;
+            mHandler.sendMessage(msg5);
+
     }
 
-    public void close(View view) {
-        Thread close = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (socket.isConnected()) {
-                        socket.close();
-                    }
-                    else
-                    {}
-                } catch (SocketException se) {
-                    se.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-    }
 
 
 
@@ -197,25 +150,36 @@ public class Client extends AppCompatActivity {
         @Override
         public void run() {
 
-            try {
-                InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
-                socket = new Socket(serverAddr, SERVERPORT);
-                //TODO: get the message from the handler
-                String str = "";
-                Log.d("run","conexion acertada"+str);
-                PrintWriter out = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream())),
-                        true);
-                out.println(str);
-                socket.close();
-                //socket = new Socket();
-               // socket.connect(new InetSocketAddress(serverAddr, SERVERPORT), 10000);
 
-            } catch (UnknownHostException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+                Looper.prepare();
+                mHandler = new Handler() {
+                    public void handleMessage(Message msg) {
+                        // Act on the message
+                        InetAddress serverAddr = null;
+                        try {
+                            serverAddr = InetAddress.getByName(SERVER_IP);
+                            socket = new Socket(serverAddr, SERVERPORT);
+                            String str = (String)msg.obj;
+                            Log.d("run","conexion acertada"+str);
+                            PrintWriter out = new PrintWriter(new BufferedWriter(
+                                    new OutputStreamWriter(socket.getOutputStream())),
+                                    true);
+                            out.println(str);
+                            socket.close();
+                        } catch (UnknownHostException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+                Looper.loop();
+
+                //socket = new Socket();
+                // socket.connect(new InetSocketAddress(serverAddr, SERVERPORT), 10000);
+
+
 
         }
 
