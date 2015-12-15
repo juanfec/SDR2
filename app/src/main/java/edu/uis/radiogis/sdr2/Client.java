@@ -32,28 +32,15 @@ public class Client extends AppCompatActivity {
     private Socket socket;
     private Handler handler;
     private static final int SERVERPORT = 9999;
-    private static final String SERVER_IP = "192.168.1.104";
+    private static final String SERVER_IP = "192.168.3.53";
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
+        //se inicializa el handler que maneja el envio de datos entre las tareas
         handler = new Handler();
-        //TODO:verificar si la delclaracion de estos botones es necesaria
-        Button frb;
-        Button spanb;
-        Button gananciab;
-        Button ventanab;
-        Button baseb;
-        Button escalab;
-        frb = (Button) findViewById(R.id.frb);
-        spanb = (Button) findViewById(R.id.spanb);
-        gananciab = (Button) findViewById(R.id.gananciab);
-        ventanab = (Button) findViewById(R.id.ventanab);
-        baseb = (Button) findViewById(R.id.baseb);
-        escalab = (Button) findViewById(R.id.escalab);
-
         //se llenan los campos tipo spinner de la lista
         Spinner ventana = (Spinner) findViewById(R.id.ventana);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.ventana_spinner, android.R.layout.simple_spinner_item);
@@ -127,11 +114,11 @@ public class Client extends AppCompatActivity {
     public void escala(View view) {
 
             Spinner et = (Spinner) findViewById(R.id.escala);
-        //TODO: cambiar escala por la palabra apropiada 
-            String str = "{\"escala\":\""+et.getSelectedItem().toString()+"\"}";
-            Message msg5 = Message.obtain();
-            msg5.obj =  str;
-            mHandler.sendMessage(msg5);
+            //TODO: implementar escala en el server(Jesús)
+            //String str = "{\"escala\":\""+et.getSelectedItem().toString()+"\"}";
+            //Message msg5 = Message.obtain();
+            //msg5.obj =  str;
+            //mHandler.sendMessage(msg5);
 
     }
 
@@ -142,6 +129,7 @@ public class Client extends AppCompatActivity {
     class ClientThread implements Runnable {
         @Override
         public void run() {
+            // el loop encargado de recibir los mensajes y acutar acorde a estos
                 Looper.prepare();
                 mHandler = new Handler() {
                     public void handleMessage(Message msg) {
