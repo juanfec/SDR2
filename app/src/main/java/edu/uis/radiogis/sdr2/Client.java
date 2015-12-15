@@ -1,30 +1,24 @@
 package edu.uis.radiogis.sdr2;
 
-import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PipedReader;
-import java.io.PipedWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class Client extends AppCompatActivity {
 
@@ -120,6 +114,11 @@ public class Client extends AppCompatActivity {
             //msg5.obj =  str;
             //mHandler.sendMessage(msg5);
 
+    }
+
+    public void grafica(View view) {
+        Intent intent = new Intent(this, Grafica.class);
+        startActivity(intent);
     }
 
 
