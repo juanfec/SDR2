@@ -40,6 +40,7 @@ public class Client extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
         handler = new Handler();
+        //TODO:verificar si la delclaracion de estos botones es necesaria
         Button frb;
         Button spanb;
         Button gananciab;
@@ -66,27 +67,21 @@ public class Client extends AppCompatActivity {
         ArrayAdapter<CharSequence> adaptere = ArrayAdapter.createFromResource(this, R.array.escala_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         escala.setAdapter(adaptere);
+
+        //se inicia tarea en segundo plano, esta controla la conexion de el socket
         new Thread(new ClientThread()).start();
 
 
     }
 
+
+    // metodos correspondientes a el envio mediante un mensaje a la tarea secundaria de el parametro a cambiar.
     public void fr(View view) {
-        try {
             EditText et = (EditText) findViewById(R.id.fr);
             String str = "{\"fc\":"+et.getText().toString()+"}";
             Message msg = Message.obtain();
             msg.obj =  str;
-                    mHandler.sendMessage(msg);
-
-
-            // se establece conexcion con el cliente
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            mHandler.sendMessage(msg);
 
     }
 
@@ -143,14 +138,10 @@ public class Client extends AppCompatActivity {
 
 
 
+    // esta clase es la tarea en segundo plano encargada de la conexion y envio de mensajes
     class ClientThread implements Runnable {
-
-
-
         @Override
         public void run() {
-
-
                 Looper.prepare();
                 mHandler = new Handler() {
                     public void handleMessage(Message msg) {
@@ -175,11 +166,6 @@ public class Client extends AppCompatActivity {
                     }
                 };
                 Looper.loop();
-
-                //socket = new Socket();
-                // socket.connect(new InetSocketAddress(serverAddr, SERVERPORT), 10000);
-
-
 
         }
 
