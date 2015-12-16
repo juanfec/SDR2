@@ -16,6 +16,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -26,7 +28,7 @@ public class Client extends AppCompatActivity {
     private Socket socket;
     private Handler handler;
     private static final int SERVERPORT = 9999;
-    private static final String SERVER_IP = "192.168.3.53";
+    private static final String SERVER_IP = "192.168.0.108";
 
 
     @Override
@@ -48,9 +50,11 @@ public class Client extends AppCompatActivity {
         ArrayAdapter<CharSequence> adaptere = ArrayAdapter.createFromResource(this, R.array.escala_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         escala.setAdapter(adaptere);
-
+        new Thread(new Udpr()).start();
         //se inicia tarea en segundo plano, esta controla la conexion de el socket
         new Thread(new ClientThread()).start();
+
+
 
 
     }
@@ -156,6 +160,30 @@ public class Client extends AppCompatActivity {
 
         }
 
+    }
+
+    class Udpr implements  Runnable{
+        @Override
+        public void run() {
+            try {
+                DatagramSocket clientsocket=new DatagramSocket(9999);
+                byte[] receivedata = new byte[1472];
+                while(true)
+                {
+                    DatagramPacket recv_packet = new DatagramPacket(receivedata, receivedata.length);
+                    Log.d("UDP", "S: Receiving...");
+                    clientsocket.receive(recv_packet);
+                    String rec_str = new String(recv_packet.getData());
+                    Log.d(" Received String ",rec_str);
+                    InetAddress ipaddress = recv_packet.getAddress();
+                    int port = recv_packet.getPort();
+                    Log.d("IPAddress : ",ipaddress.toString());
+                    Log.d(" Port : ",Integer.toString(port));
+                }
+            } catch (Exception e) {
+                Log.e("UDP", "S: Error", e);
+            }
+        }
     }
 
 

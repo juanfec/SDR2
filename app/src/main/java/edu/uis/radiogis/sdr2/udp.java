@@ -3,14 +3,15 @@ package edu.uis.radiogis.sdr2;
 /**
  * Created by Juanfe on 15/12/2015.
  */
+import android.util.Log;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import android.util.Log;
 
 //implements Runnable so it can be created as a new thread
 public class udp implements Runnable {
-    public static final String SERVERIP = "192.168.3.51";
+    public static final String SERVERIP = "192.168.0.8";
     public static final int SERVERPORT = 9999;
 
     public void run() {

@@ -21,6 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="edu.uis.radiogis.sdr2.Grafica"
+            android:label="Grafica"
+            android:parentActivityName="edu.uis.radiogis.sdr2.Client" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uis.radiogis.sdr2.Grafica" />
+        </activity>
     </application>
 
 </manifest>
