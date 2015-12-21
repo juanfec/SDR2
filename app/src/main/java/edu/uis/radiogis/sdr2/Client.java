@@ -12,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -26,17 +29,14 @@ public class Client extends AppCompatActivity {
 
     public Handler mHandler;
     private Socket socket;
-    private Handler handler;
     private static final int SERVERPORT = 9999;
-    private static final String SERVER_IP = "192.168.0.108";
+    private static final String SERVER_IP = "192.168.45.234";
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity);
-        //se inicializa el handler que maneja el envio de datos entre las tareas
-        handler = new Handler();
         //se llenan los campos tipo spinner de la lista
         Spinner ventana = (Spinner) findViewById(R.id.ventana);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.ventana_spinner, android.R.layout.simple_spinner_item);
@@ -125,6 +125,14 @@ public class Client extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void inicia(View view) {
+        String start="1";
+        Message msg5 = Message.obtain();
+        msg5.obj =  start;
+        mHandler.sendMessage(msg5);
+
+    }
+
 
 
 
@@ -142,15 +150,27 @@ public class Client extends AppCompatActivity {
                             serverAddr = InetAddress.getByName(SERVER_IP);
                             socket = new Socket(serverAddr, SERVERPORT);
                             String str = (String)msg.obj;
-                            Log.d("run","conexion acertada"+str);
-                            PrintWriter out = new PrintWriter(new BufferedWriter(
-                                    new OutputStreamWriter(socket.getOutputStream())),
-                                    true);
-                            out.println(str);
+                            if(str=="1"){
+                                JSONObject obj = new JSONObject();
+                                obj.put("start",Boolean.TRUE);
+                                obj.put("n",8);
+                                PrintWriter out = new PrintWriter(new BufferedWriter(
+                                        new OutputStreamWriter(socket.getOutputStream())),
+                                        true);
+                                out.println(obj);
+                            }else{
+                                Log.d("run","conexion acertada"+str);
+                                PrintWriter out = new PrintWriter(new BufferedWriter(
+                                        new OutputStreamWriter(socket.getOutputStream())),
+                                        true);
+                                out.println(str);
+                            }
                             socket.close();
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
 

@@ -149,17 +149,35 @@
 
             </LinearLayout>
         </LinearLayout>
-    <Button
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Grafica "
-        android:id="@+id/close"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:onClick="grafica"
-        android:paddingBottom="40dp"
-        android:paddingTop="40dp"
-        android:gravity="center" />
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.00000001">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grafica "
+            android:id="@+id/close"
+            android:layout_below="@+id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:onClick="grafica"
+            android:paddingBottom="40dp"
+            android:paddingTop="40dp"
+            android:gravity="center" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Iniciar"
+            android:onClick="inicia"
+            android:id="@+id/button"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
 </LinearLayout>
 
 
