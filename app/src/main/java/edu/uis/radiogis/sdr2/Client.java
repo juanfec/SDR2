@@ -30,7 +30,7 @@ public class Client extends AppCompatActivity {
     public Handler mHandler;
     private Socket socket;
     private static final int SERVERPORT = 9999;
-    private static final String SERVER_IP = "192.168.45.234";
+    private static final String SERVER_IP = "192.168.0.51";
 
 
     @Override
